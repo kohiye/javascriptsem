@@ -1,0 +1,51 @@
+* {
+    outline: 1px solid red;
+}
+
+#current {
+    min-width: 270px;
+    min-height: 270px;
+    background-color: orange;
+    margin: 10px;
+}
+
+#days {
+    min-height: 270px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#days > *{
+    min-width: 120px;
+    background-color: green;
+    margin: 10px;
+    flex-grow: 1;
+    display: flex;
+}
+
+#days > * > * {
+}
+
+#hours {
+    display: flex;
+    overflow-x: scroll;
+}
+
+#hours > * {
+    min-height: 100px;
+    min-width: 100px;
+    margin: 10px;
+    background-color: blue;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+}
+
+#row1 {
+    display: flex;
+    flex-wrap: wrap;
+}
