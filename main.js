@@ -25,9 +25,9 @@ class DayForecast {
     }
     display(box) {
         let dateItems = this.date.split("-")
-        box.append(createElementFromHTML(
+        let element = createElementFromHTML(
             `
-            <div>
+            <div class="day" data-date="${this.date}">
                 <h2 class="date">${dateItems[1]}/${dateItems[2]}</h2>
                 <img class="day-icon" src="https:${this.iconURL}">
                 <h2 class="temp-high">${this.temp_high}°</h2>
@@ -35,7 +35,12 @@ class DayForecast {
                 <h2 class="day-desc">${this.desc}</h2>
             </div>
             `
-        ));
+        );
+        element.addEventListener("click", (e) => {
+            e.preventDefault();
+            getAllWeather(e.target.attributes["data-date"].value);
+        });
+        box.append(element);
     }
 }
 
@@ -108,7 +113,10 @@ function getDailyForecast(json){
     return daily;
 }
 
-function getHourlyForecast(json, date){
+function getHourlyForecast(json, date = null){
+    if (!date){
+        date = json.forecast.forecastday[0].date;
+    }
     let hourly = [];
     for (let day of json.forecast.forecastday){
         if (day.date != date) continue;
@@ -129,7 +137,31 @@ function welcomeFade(){
     document.getElementById("welcome-screen").style.display = "none";
 }
 
-async function getAllWeather(){
+document.getElementById("location-input").addEventListener("input", async (e) => {
+    if (!e.target.value){
+        return;
+    }
+    let datalist = document.getElementById("locations");
+    let url = `http://api.weatherapi.com/v1/search.json?key=${key.replaceAll(" ", "-").toLowerCase()}&q=${e.target.value}`
+    try {
+        const response = await fetch(url);
+        if (!response.ok){
+            throw new Error(`Response status: ${response.status}`);
+        }
+
+    const json = await response.json();
+    while(datalist.childElementCount > 30){
+        datalist.removeChild(datalist.firstElementChild);
+    }
+    for(let loc of json){
+        datalist.appendChild(createElementFromHTML(`<option value="${loc.name}"></option`))
+    }
+    } catch(error){
+        console.error(error.message);
+    }
+});
+
+async function getAllWeather(date = null){
     let currentBox = document.getElementById("current");
     let hoursBox = document.getElementById("hours");
     let daysBox = document.getElementById("days");
@@ -145,7 +177,7 @@ async function getAllWeather(){
     let days = getDailyForecast(json);
     for(let day of days){day.display(daysBox)};
 
-    let hours = getHourlyForecast(json, "2025-07-02");
+    let hours = getHourlyForecast(json, date);
     for(let hour of hours){hour.display(hoursBox)};
 };
 //getHourlyForecast("Kemerovo", "2025-07-01")
