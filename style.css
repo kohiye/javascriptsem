@@ -1,12 +1,55 @@
 * {
     outline: 1px solid red;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-#current {
+h1 {
+    font-size: 100px;
+    margin: 0px;
+}
+
+body {
+    margin: 0px;
+    background-color:white;
+}
+
+#welcome-screen {
+    background-color: #F5E7DE;
+    position:absolute;
+    z-index: 10;
+    height: 100%;
+    width: 100%;
+}
+#current-flex > * {
+    margin: 5px;
+}
+#current-flex:hover {
+    background-color: #F1E3DA;
+}
+
+#current-flex {
     min-width: 270px;
     min-height: 270px;
-    background-color: orange;
+    background-color: #F5E7DE;
     margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#current-flex > dir > *{
+    display: inline;
+}
+
+#current-flex > dir {
+    display: flex;
+    padding: 0%;
+    align-items: start;
+}
+
+.date {
+    font-size: 40px;
+    margin: 0%;
 }
 
 #days {
@@ -17,15 +60,35 @@
     align-items: center;
 }
 
+.day-desc {
+    text-align: end;
+    flex-grow: 2;
+}
+
 #days > *{
     min-width: 120px;
-    background-color: green;
+    background-color: #F5E7DE;
     margin: 10px;
     flex-grow: 1;
     display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+#days > *:hover {
+    background-color: #F1E3DA;
+}
+
+.temp-high {
+    font-size: 40px;
+}
+
+.temp-low {
+    color: rgba(50, 50, 50, 1)
 }
 
 #days > * > * {
+    margin: 5px;
 }
 
 #hours {
@@ -37,7 +100,11 @@
     min-height: 100px;
     min-width: 100px;
     margin: 10px;
-    background-color: blue;
+    background-color: #F5E7DE;
+}
+
+#hours > *:hover {
+    background-color: #F1E3DA;
 }
 
 #main {

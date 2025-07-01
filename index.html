@@ -3,25 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Weather App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="welcome-screen" style="display: none">
+        <h1>Welcome</h1>
+        <label for="name" id="name-label">What's your name?</label>
+        <input type="text" id="name-input", name="name">
+        <button id="welcome-button" onclick="welcomeFade()">Enter</button>
+    </div>
+    <header id="header"></header>
     <div id="main">
         <div id="row1">
+            <div>
+                <label for="location" id="location-label">Enter your location: </label>
+                <input type="text" id="location-input" name="location" value="" list="locations">
+                <datalist id="locations">
+                    <option value="Kemerovo"></option>
+                    <option value="New York"></option>
+                    <option value="London"></option>
+                    <option value="New Delhi"></option>
+                </datalist>
+                <button id="location-button" onclick="getAllWeather()">Enter</button>
+            </div>
             <div id="current"></div>
             <div id="days">
-                <!--
-                <div>
-                    <div class="date">date</div>
-                    <div class="day-icon">icon</div>
-                    <div class="temp-high">temp high</div>
-                    <div class="temp-low">temp low</div>
-                    <div class="day-desc">disc</div>
-                </div>
-                <div>two</div>
-                <div>three</div>
--->
             </div>
         </div>
         <div id="hours" class="scrollh">

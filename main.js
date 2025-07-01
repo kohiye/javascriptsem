@@ -9,8 +9,6 @@ for (let el of myScroll){
 
 let key = "d3cf127b87324f4fa40143600252305"
 
-let forecastDays = [];
-
 function createElementFromHTML(htmlString){
     let div = document.createElement('div');
     div.innerHTML = htmlString.trim();
@@ -30,11 +28,11 @@ class DayForecast {
         box.append(createElementFromHTML(
             `
             <div>
-                <div class="date">${dateItems[1]}/${dateItems[2]}</div>
+                <h2 class="date">${dateItems[1]}/${dateItems[2]}</h2>
                 <img class="day-icon" src="https:${this.iconURL}">
-                <div class="temp-high">${this.temp_high}°</div>
-                <div class="temp-low">${this.temp_low}°</div>
-                <div class="day-desc">${this.desc}</div>
+                <h2 class="temp-high">${this.temp_high}°</h2>
+                <h2 class="temp-low">${this.temp_low}°</h2>
+                <h2 class="day-desc">${this.desc}</h2>
             </div>
             `
         ));
@@ -49,12 +47,17 @@ class CurrentWeather {
         this.desc = desc;
     }
     display(box){
+        if (box.hasChildNodes()){
+            box.removeChild(box.firstElementChild);
+        }
         box.append(createElementFromHTML(
             `
             <div id="current-flex">
                 <h2 id="current-desc">${this.desc}</h2>
+                <dir>
                 <h1 id="current-temp">${this.temp}</h1>
-                <img id="current-icon" src="https:${this.iconURL}">
+                <img id="current-icon" src="https:${this.iconURL}" width="80px">
+                </dir>
                 <h2 id="current-feel">Feels like ${this.feelsTemp}°</h2>
             </div>
             `
@@ -98,9 +101,11 @@ async function getData(location) {
 }
 
 function getDailyForecast(json){
+    let daily = []
     for (let day of json.forecast.forecastday){
-        forecastDays.push(new DayForecast(day.day.condition.icon, day.day.mintemp_c, day.day.maxtemp_c, day.day.condition.text, day.date))
+        daily.push(new DayForecast(day.day.condition.icon, day.day.mintemp_c, day.day.maxtemp_c, day.day.condition.text, day.date))
     }
+    return daily;
 }
 
 function getHourlyForecast(json, date){
@@ -111,7 +116,6 @@ function getHourlyForecast(json, date){
             hourly.push(new HourForecast(hour.temp_c, hour.condition.icon, hour.time.split(" ")[1]))
         }
     }
-    console.log(hourly);
     return hourly;
 }
 
@@ -119,20 +123,31 @@ function getCurrentWeather(json){
     return new CurrentWeather(json.current.temp_c, json.current.feelslike_c, json.current.condition.icon, json.current.condition.text);
 }
 
-let daysBox = document.getElementById("days");
-let currentBox = document.getElementById("current");
-let hoursBox = document.getElementById("hours");
-//getData("Kemerovo").then(getDailyForecast).then(console.log(forecastDays)).then(() => {});
-(async function(){
-    let json = await getData("Kemerovo");
-    getDailyForecast(json);
-    console.log(forecastDays);
+function welcomeFade(){
+    let username = document.getElementById("name-input").value;
+    document.getElementById("header").innerHTML = `Welcome, ${username}`;
+    document.getElementById("welcome-screen").style.display = "none";
+}
+
+async function getAllWeather(){
+    let currentBox = document.getElementById("current");
+    let hoursBox = document.getElementById("hours");
+    let daysBox = document.getElementById("days");
+    hoursBox.innerHTML = "";
+    daysBox.innerHTML = "";
+
+    let location = document.getElementById("location-input").value;
+    let json = await getData(location);
+
     let current = getCurrentWeather(json);
     current.display(currentBox);
-    for(let day of forecastDays){day.display(daysBox)};
-    let hours = getHourlyForecast(json, "2025-07-01");
+
+    let days = getDailyForecast(json);
+    for(let day of days){day.display(daysBox)};
+
+    let hours = getHourlyForecast(json, "2025-07-02");
     for(let hour of hours){hour.display(hoursBox)};
-}());
+};
 //getHourlyForecast("Kemerovo", "2025-07-01")
 //getDailyForecast("Kemerovo")
 
