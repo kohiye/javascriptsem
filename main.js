@@ -90,7 +90,7 @@ class HourForecast {
 }
 
 async function getData(location) {
-    const url = `http://api.weatherapi.com/v1/forecast.json?key=${key}&q=${location}&days=3&aqi=no&alerts=no`
+    const url = `https://api.weatherapi.com/v1/forecast.json?key=${key}&q=${location}&days=3&aqi=no&alerts=no`
     try {
         const response = await fetch(url);
         if (!response.ok){
@@ -142,7 +142,7 @@ document.getElementById("location-input").addEventListener("input", async (e) =>
         return;
     }
     let datalist = document.getElementById("locations");
-    let url = `http://api.weatherapi.com/v1/search.json?key=${key.replaceAll(" ", "-").toLowerCase()}&q=${e.target.value}`
+    let url = `https://api.weatherapi.com/v1/search.json?key=${key.replaceAll(" ", "-").toLowerCase()}&q=${e.target.value}`
     try {
         const response = await fetch(url);
         if (!response.ok){
